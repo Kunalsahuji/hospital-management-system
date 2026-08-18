@@ -1,0 +1,155 @@
+{
+  "info": {
+    "name": "CareConnect - Doctor API",
+    "description": "Collection for Doctor endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Register Doctor",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Dr. Jane Smith\",\n  \"username\": \"drjane\",\n  \"email\": \"jane@hospital.com\",\n  \"password\": \"password123\",\n  \"phone\": \"8765432100\",\n  \"role\": \"doctor\",\n  \"specialization\": \"Cardiology\",\n  \"qualification\": \"MD Cardiology\",\n  \"experience\": 10,\n  \"consultationFee\": 500,\n  \"hospital\": \"City Heart Center\",\n  \"availableDays\": [\"Monday\", \"Wednesday\", \"Friday\"],\n  \"availableFrom\": \"09:00\",\n  \"availableTo\": \"17:00\",\n  \"bio\": \"Top cardiologist.\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/register",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "register"]
+        }
+      }
+    },
+    {
+      "name": "Login Doctor",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const response = pm.response.json();",
+              "if (response.success && response.token) {",
+              "    pm.environment.set(\"token\", response.token);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"jane@hospital.com\",\n  \"password\": \"password123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "login"]
+        }
+      }
+    },
+    {
+      "name": "Get My Appointments",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            { "key": "token", "value": "{{token}}", "type": "string" }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/appointments",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "appointments"]
+        }
+      }
+    },
+    {
+      "name": "Update Appointment Status",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            { "key": "token", "value": "{{token}}", "type": "string" }
+          ]
+        },
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"confirmed\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/appointments/REPLACE_WITH_APPOINTMENT_ID/status",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "appointments", "REPLACE_WITH_APPOINTMENT_ID", "status"]
+        }
+      }
+    },
+    {
+      "name": "Update Profile",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            { "key": "token", "value": "{{token}}", "type": "string" }
+          ]
+        },
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Dr. Jane Smith Updated\",\n  \"phone\": \"8765432100\",\n  \"specialization\": \"Cardiology\",\n  \"qualification\": \"MD Cardiology\",\n  \"experience\": 12,\n  \"consultationFee\": 600,\n  \"hospital\": \"City Heart Center\",\n  \"availableFrom\": \"09:00\",\n  \"availableTo\": \"17:00\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/profile",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "profile"]
+        }
+      }
+    },
+    {
+      "name": "Change Password",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            { "key": "token", "value": "{{token}}", "type": "string" }
+          ]
+        },
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"currentPassword\": \"password123\",\n  \"newPassword\": \"newpassword123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/password",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "password"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000"
+    }
+  ]
+}

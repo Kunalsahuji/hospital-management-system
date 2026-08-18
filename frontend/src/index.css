@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #f8fafc; /* Slate-50 to match design */
+  overflow-y: scroll; /* Force scrollbar to prevent layout shift */
+}
