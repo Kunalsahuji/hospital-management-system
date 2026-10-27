@@ -9,6 +9,7 @@ const { errorHandler, notFound } = require('./src/middleware/errorMiddleware');
 const authRoutes = require('./src/routes/authRoutes');
 const userRoutes = require('./src/routes/userRoutes');
 const appointmentRoutes = require('./src/routes/appointmentRoutes');
+const healthRoutes = require('./src/routes/healthRoutes');
 const logger = require('./src/utils/logger');
 
 // Load env vars
@@ -33,6 +34,7 @@ app.use(express.json({ limit: '10kb' }));
 // ─── HTTP Request Logging (morgan → winston) ──────────────────────────────────
 app.use(morgan('dev', { stream: logger.stream }));
 
+app.use('/api/health', healthRoutes);
 
 // Rate limiting
 const apiLimiter = rateLimit({
