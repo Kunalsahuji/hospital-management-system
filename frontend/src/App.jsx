@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import { Suspense, lazy } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Navbar from './components/Navbar';
@@ -15,6 +15,7 @@ const PatientDashboard = lazy(() => import('./pages/PatientDashboard'));
 const DoctorDashboard = lazy(() => import('./pages/DoctorDashboard'));
 const DoctorsList = lazy(() => import('./pages/DoctorsList'));
 const PatientsList = lazy(() => import('./pages/PatientsList'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 function App() {
   const location = useLocation();
@@ -61,6 +62,8 @@ function App() {
                 <PatientsList />
               </ProtectedRoute>
             } />
+
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
       </main>
