@@ -125,3 +125,6 @@ scratch/
 
 # Postman collection folder (Optional depending on user preference, but we'll include it in the zip so don't ignore it)
 # Seed data folder (We will not ignore the script, but maybe ignore a database backup if there was one, for now don't ignore)
+postman
+snapshots
+db_collections
