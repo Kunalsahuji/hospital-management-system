@@ -28,3 +28,8 @@ and deployment-related settings.
   not solely through public self-registration.
 
 No other evidence-backed vulnerabilities were identified during this review.
+
+## Follow-up review — 2026-10-27
+
+The patient-record access issue above remains present. No additional
+evidence-backed vulnerabilities were identified.
