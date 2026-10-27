@@ -116,10 +116,12 @@ const loginUser = async (req, res, next) => {
     const user = await User.findOne({ username });
 
     if (user && (await user.matchPassword(password))) {
-      if (user.role === 'doctor' && !user.doctorVerified) {
+      if (user.role === 'doctor' && user.doctorVerificationStatus !== 'approved') {
         return res.status(403).json({
           success: false,
-          message: 'Doctor account is pending verification'
+          message: user.doctorVerificationStatus === 'rejected'
+            ? 'Doctor account verification was rejected'
+            : 'Doctor account is pending verification'
         });
       }
 
@@ -168,6 +170,7 @@ const updateProfile = async (req, res, next) => {
     delete updates.password;
     delete updates.role;
     delete updates.doctorVerified;
+    delete updates.doctorVerificationStatus;
     delete updates.username; // also prevent username changes
 
     Object.keys(updates).forEach(key => {

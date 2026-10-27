@@ -29,10 +29,12 @@ const authorize = (...roles) => {
       return res.status(403).json({ success: false, message: `User role ${req.user.role} is not authorized to access this route` });
     }
 
-    if (req.user.role === 'doctor' && !req.user.doctorVerified) {
+    if (req.user.role === 'doctor' && req.user.doctorVerificationStatus !== 'approved') {
       return res.status(403).json({
         success: false,
-        message: 'Doctor account is pending verification'
+        message: req.user.doctorVerificationStatus === 'rejected'
+          ? 'Doctor account verification was rejected'
+          : 'Doctor account is pending verification'
       });
     }
 

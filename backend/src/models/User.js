@@ -30,12 +30,19 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['patient', 'doctor'],
+    enum: ['patient', 'doctor', 'admin'],
     required: true,
   },
   doctorVerified: {
     type: Boolean,
     default: false,
+  },
+  doctorVerificationStatus: {
+    type: String,
+    enum: ['pending', 'approved', 'rejected'],
+    default: function() {
+      return this.role === 'doctor' ? 'pending' : undefined;
+    },
   },
   // Doctor specific fields
   specialization: {

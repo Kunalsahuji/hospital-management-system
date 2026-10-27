@@ -16,6 +16,7 @@ const DoctorDashboard = lazy(() => import('./pages/DoctorDashboard'));
 const DoctorsList = lazy(() => import('./pages/DoctorsList'));
 const PatientsList = lazy(() => import('./pages/PatientsList'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 
 function App() {
   const location = useLocation();
@@ -60,6 +61,12 @@ function App() {
             <Route path="/patients" element={
               <ProtectedRoute allowedRoles={['doctor']}>
                 <PatientsList />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/login" element={<Login />} />
+            <Route path="/admin/dashboard" element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminDashboard />
               </ProtectedRoute>
             } />
 

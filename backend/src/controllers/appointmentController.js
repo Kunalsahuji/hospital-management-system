@@ -16,7 +16,7 @@ const bookAppointment = async (req, res, next) => {
     const doctorExists = await User.findOne({
       _id: doctor,
       role: 'doctor',
-      doctorVerified: true
+      doctorVerificationStatus: 'approved'
     });
     if (!doctorExists) {
       return res.status(404).json({ success: false, message: 'Doctor not found' });

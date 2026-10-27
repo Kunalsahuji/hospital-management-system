@@ -4,9 +4,12 @@ const Appointment = require('../models/Appointment');
 const getPublicStats = async (req, res, next) => {
   try {
     const patientsCount = await User.countDocuments({ role: 'patient' });
-    const doctorsCount = await User.countDocuments({ role: 'doctor', doctorVerified: true });
+    const doctorsCount = await User.countDocuments({ role: 'doctor', doctorVerificationStatus: 'approved' });
     
-    const specializations = await User.distinct('specialization', { role: 'doctor', doctorVerified: true });
+    const specializations = await User.distinct('specialization', {
+      role: 'doctor',
+      doctorVerificationStatus: 'approved'
+    });
     const specialtiesCount = specializations.length;
 
     res.json({
@@ -25,7 +28,7 @@ const getPublicStats = async (req, res, next) => {
 
 const getDoctors = async (req, res, next) => {
   try {
-    const filters = { role: 'doctor', doctorVerified: true };
+    const filters = { role: 'doctor', doctorVerificationStatus: 'approved' };
     
     // Optional filtering by specialization
     if (req.query.specialization) {
@@ -67,7 +70,7 @@ const getDoctorById = async (req, res, next) => {
     const doctor = await User.findOne({
       _id: req.params.id,
       role: 'doctor',
-      doctorVerified: true
+      doctorVerificationStatus: 'approved'
     }).select('-password');
     
     if (!doctor) {

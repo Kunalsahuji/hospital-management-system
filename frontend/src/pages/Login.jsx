@@ -13,13 +13,15 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const isDoctor = location.pathname.includes('doctor');
-  const roleName = isDoctor ? 'Doctor' : 'Patient';
+  const isAdmin = location.pathname.includes('admin');
+  const roleName = isAdmin ? 'Admin' : isDoctor ? 'Doctor' : 'Patient';
 
   // Redirect if already logged in
   React.useEffect(() => {
     if (user) {
       if (user.role === 'patient') navigate('/patient/dashboard');
       if (user.role === 'doctor') navigate('/doctor/dashboard');
+      if (user.role === 'admin') navigate('/admin/dashboard');
     }
   }, [user, navigate]);
 
@@ -35,9 +37,9 @@ const Login = () => {
       return;
     }
 
-    const success = await login(username, password);
-    if (!success) {
-      setError('Invalid username or password');
+    const result = await login(username, password);
+    if (!result.success) {
+      setError(result.message);
     }
     setIsSubmitting(false);
   };
@@ -115,12 +117,12 @@ const Login = () => {
           </button>
         </form>
 
-        <div className="mt-6 text-center text-sm text-gray-500">
+        {!isAdmin && <div className="mt-6 text-center text-sm text-gray-500">
           Don't have an account?{' '}
           <Link to={`/${isDoctor ? 'doctor' : 'patient'}/register`} className="font-medium text-teal-600 hover:text-teal-500">
             Sign up here
           </Link>
-        </div>
+        </div>}
       </div>
     </div>
   );

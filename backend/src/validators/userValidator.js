@@ -1,7 +1,6 @@
 const Joi = require('joi');
 
 // Regex for exactly 10 digits starting with 6-9
-const phoneRegex = /^[6-9]\d{9}$/;
 // Regex for alphabetic characters and spaces only
 const nameRegex = /^[A-Za-z\s]+$/;
 

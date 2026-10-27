@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Hospital, LogOut, User as UserIcon, Calendar, Menu, X } from 'lucide-react';
+import { Hospital, LogOut, User as UserIcon, Menu, X } from 'lucide-react';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -60,11 +60,16 @@ const Navbar = () => {
                     </NavLink>
                   </>
                 )}
+                {user.role === 'admin' && (
+                  <NavLink to="/admin/dashboard" className={({isActive}) => `px-3 py-2 rounded-md font-medium flex items-center transition-colors ${isActive ? 'text-teal-600 bg-teal-50' : 'text-gray-700 hover:text-teal-600'}`}>
+                    Doctor Applications
+                  </NavLink>
+                )}
 
                 <div className="border-l border-gray-300 h-6 mx-2"></div>
                 
                 <Link 
-                  to={user.role === 'patient' ? '/patient/dashboard/profile' : '/doctor/dashboard/profile'}
+                  to={user.role === 'patient' ? '/patient/dashboard/profile' : user.role === 'doctor' ? '/doctor/dashboard/profile' : '/admin/dashboard'}
                   className="text-sm text-gray-500 font-medium truncate max-w-[120px] hover:text-teal-600 transition-colors cursor-pointer flex items-center gap-1.5"
                 >
                   <UserIcon size={16} />
@@ -106,7 +111,7 @@ const Navbar = () => {
             ) : (
               <>
                 <Link 
-                  to={user.role === 'patient' ? '/patient/dashboard/profile' : '/doctor/dashboard/profile'}
+                  to={user.role === 'patient' ? '/patient/dashboard/profile' : user.role === 'doctor' ? '/doctor/dashboard/profile' : '/admin/dashboard'}
                   onClick={() => setIsMenuOpen(false)}
                   className="px-3 py-2 text-sm text-gray-500 font-medium border-b border-gray-100 mb-2 hover:bg-gray-50 hover:text-teal-600 flex items-center gap-2 transition-colors cursor-pointer block"
                 >
@@ -133,6 +138,11 @@ const Navbar = () => {
                        Patients
                     </NavLink>
                   </>
+                )}
+                {user.role === 'admin' && (
+                  <NavLink to="/admin/dashboard" onClick={() => setIsMenuOpen(false)} className={({isActive}) => `block px-3 py-2 rounded-md font-medium ${isActive ? 'text-teal-600 bg-teal-50' : 'text-gray-700 hover:bg-gray-50'}`}>
+                    Doctor Applications
+                  </NavLink>
                 )}
 
                 <button 

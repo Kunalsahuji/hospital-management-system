@@ -10,6 +10,7 @@ const authRoutes = require('./src/routes/authRoutes');
 const userRoutes = require('./src/routes/userRoutes');
 const appointmentRoutes = require('./src/routes/appointmentRoutes');
 const healthRoutes = require('./src/routes/healthRoutes');
+const adminRoutes = require('./src/routes/adminRoutes');
 const logger = require('./src/utils/logger');
 
 // Load env vars
@@ -55,6 +56,7 @@ app.use('/api/', apiLimiter);
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/appointments', appointmentRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Setup temporary basic route
 app.get('/', (req, res) => {

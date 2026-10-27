@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import { createContext, useState, useEffect, useContext } from 'react';
 import api from '../api/axios';
 import { toast } from 'react-hot-toast';
 
@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
         try {
           const res = await api.get('/auth/me');
           setUser(res.data.data);
-        } catch (error) {
+        } catch {
           localStorage.removeItem('token');
           localStorage.removeItem('user');
           setUser(null);
@@ -37,10 +37,11 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('user', JSON.stringify(userData));
       setUser(userData);
       toast.success('Login successful!');
-      return true;
+      return { success: true };
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Login failed');
-      return false;
+      const message = error.response?.data?.message || 'Login failed';
+      toast.error(message);
+      return { success: false, message };
     }
   };
 

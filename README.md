@@ -21,6 +21,7 @@
 - **High-Fidelity UI**: Clean, premium aesthetic with smooth gradients, glassmorphism hover effects, and micro-animations for enhanced engagement.
 - **Role-Based Authentication**: Secure login and registration flows tailored for Doctors and Patients using JWT authentication.
 - **Doctor Verification**: Doctor registrations remain pending until an administrator verifies the account. Only verified doctors can sign in or access doctor-only data.
+- **Admin Review Portal**: Administrators can review pending doctor applications and approve or reject them from the protected admin dashboard.
 - **Patient Privacy**: Doctors can view only patients connected to their appointments, with only the fields needed for the patient directory.
 - **Dynamic Dashboards**: 
   - **Patients**: View history, check appointment statuses, and seamlessly book new consultations.
@@ -48,6 +49,32 @@ npm install
 npm run dev
 ```
 
+### 🔹 Create the first admin
+
+Admin accounts cannot be created through public registration. Create the first
+admin locally with private environment variables and the production MongoDB URI
+(or your development database URI):
+
+```powershell
+$env:ADMIN_NAME = "Hospital Admin"
+$env:ADMIN_USERNAME = "hospitaladmin"
+$env:ADMIN_EMAIL = "admin@example.com"
+$env:ADMIN_PHONE = "+919876543210"
+$env:ADMIN_PASSWORD = "use-a-unique-password-of-at-least-12-characters"
+npm run admin:create
+```
+
+Run this command from the `backend` directory. The script reads `MONGODB_URI`
+from `backend/.env` or the current process environment (the process environment
+takes precedence), creates one admin only, hashes the password, and refuses to
+create another admin if one already exists. Do not commit the admin credentials
+or put them in frontend/Vercel environment variables.
+
+Admins sign in at `/admin/login`. The `/admin/dashboard` page lists pending
+doctor applications and supports approval or rejection. Doctors can sign in and
+use doctor features only after approval. Verify a clinician's credentials
+before approving; rejected applications cannot sign in.
+
 ### 🔹 Frontend
 ```bash
 # Navigate to frontend directory
@@ -59,6 +86,15 @@ npm install
 # Run development server
 npm run dev
 ```
+
+### Doctor approval workflow
+
+1. A doctor applies using the doctor registration form.
+2. The application is stored with pending status; it does not create an
+   authenticated doctor session.
+3. An admin signs in at `/admin/login`, reviews the application, and approves
+   or rejects it from the dashboard.
+4. Approved doctors can log in. Rejected doctors cannot log in.
 
 ---
 

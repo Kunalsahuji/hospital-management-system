@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { User, Stethoscope } from 'lucide-react';
@@ -86,6 +85,16 @@ const AuthSelection = () => {
           </div>
         </motion.button>
       </motion.div>
+      <p className="mt-8 text-center text-sm text-gray-500">
+        Hospital administrator?{' '}
+        <button
+          type="button"
+          onClick={() => navigate('/admin/login')}
+          className="font-semibold text-teal-600 hover:text-teal-700"
+        >
+          Admin sign in
+        </button>
+      </p>
     </div>
   );
 };
