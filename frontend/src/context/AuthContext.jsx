@@ -47,6 +47,11 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       const res = await api.post('/auth/register', userData);
+      if (res.data.pendingApproval) {
+        toast.success(res.data.message);
+        return 'pending';
+      }
+
       const { token, ...newUserData } = res.data.data;
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(newUserData));

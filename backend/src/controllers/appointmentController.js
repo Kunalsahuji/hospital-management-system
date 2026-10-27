@@ -13,7 +13,11 @@ const bookAppointment = async (req, res, next) => {
     const { doctor, appointmentDate, appointmentTime, reason, notes } = req.body;
 
     // Check if doctor exists and is actually a doctor
-    const doctorExists = await User.findOne({ _id: doctor, role: 'doctor' });
+    const doctorExists = await User.findOne({
+      _id: doctor,
+      role: 'doctor',
+      doctorVerified: true
+    });
     if (!doctorExists) {
       return res.status(404).json({ success: false, message: 'Doctor not found' });
     }
@@ -59,7 +63,7 @@ const getAppointments = async (req, res, next) => {
     if (req.user.role === 'patient') {
       appointments = await Appointment.find({ patient: req.user._id }).populate('doctor', 'name specialization hospital');
     } else if (req.user.role === 'doctor') {
-      appointments = await Appointment.find({ doctor: req.user._id }).populate('patient', 'name phone email gender');
+      appointments = await Appointment.find({ doctor: req.user._id }).populate('patient', 'name phone');
     }
 
     res.json({

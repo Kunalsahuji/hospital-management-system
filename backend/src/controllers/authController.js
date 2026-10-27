@@ -17,18 +17,29 @@ const registerUser = async (req, res, next) => {
 
     const { name, username, email, password, phone, role } = req.body;
 
-    const userExists = await User.findOne({ $or: [{ email }, { username }] });
+    const normalizedEmail = email.trim().toLowerCase();
+    const normalizedPhone = phone.trim();
+    const userExists = await User.findOne({
+      $or: [
+        { email: normalizedEmail },
+        { username },
+        { phone: normalizedPhone }
+      ]
+    });
 
     if (userExists) {
-      return res.status(400).json({ success: false, message: 'User already exists with that email or username' });
+      return res.status(409).json({
+        success: false,
+        message: 'A user with that email, username, or phone number already exists'
+      });
     }
 
     const userData = {
       name,
       username,
-      email,
+      email: normalizedEmail,
       password,
-      phone,
+      phone: normalizedPhone,
       role
     };
 
@@ -51,6 +62,14 @@ const registerUser = async (req, res, next) => {
     const user = await User.create(userData);
 
     if (user) {
+      if (role === 'doctor') {
+        return res.status(202).json({
+          success: true,
+          pendingApproval: true,
+          message: 'Doctor registration submitted. Access will be available after verification.'
+        });
+      }
+
       const userDataObj = user.toObject();
       delete userDataObj.password;
 
@@ -66,6 +85,22 @@ const registerUser = async (req, res, next) => {
       res.status(400).json({ success: false, message: 'Invalid user data' });
     }
   } catch (error) {
+    if (error.code === 11000) {
+      const field = Object.keys(error.keyPattern || {})[0];
+      const fieldLabels = {
+        email: 'email',
+        username: 'username',
+        phone: 'phone number'
+      };
+
+      return res.status(409).json({
+        success: false,
+        message: fieldLabels[field]
+          ? `A user with this ${fieldLabels[field]} already exists`
+          : 'A user with these details already exists'
+      });
+    }
+
     next(error);
   }
 };
@@ -81,6 +116,13 @@ const loginUser = async (req, res, next) => {
     const user = await User.findOne({ username });
 
     if (user && (await user.matchPassword(password))) {
+      if (user.role === 'doctor' && !user.doctorVerified) {
+        return res.status(403).json({
+          success: false,
+          message: 'Doctor account is pending verification'
+        });
+      }
+
       const userDataObj = user.toObject();
       delete userDataObj.password;
 
@@ -125,6 +167,7 @@ const updateProfile = async (req, res, next) => {
     delete updates.email;
     delete updates.password;
     delete updates.role;
+    delete updates.doctorVerified;
     delete updates.username; // also prevent username changes
 
     Object.keys(updates).forEach(key => {

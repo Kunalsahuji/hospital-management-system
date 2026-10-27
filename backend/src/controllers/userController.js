@@ -1,11 +1,12 @@
 const User = require('../models/User');
+const Appointment = require('../models/Appointment');
 
 const getPublicStats = async (req, res, next) => {
   try {
     const patientsCount = await User.countDocuments({ role: 'patient' });
-    const doctorsCount = await User.countDocuments({ role: 'doctor' });
+    const doctorsCount = await User.countDocuments({ role: 'doctor', doctorVerified: true });
     
-    const specializations = await User.distinct('specialization', { role: 'doctor' });
+    const specializations = await User.distinct('specialization', { role: 'doctor', doctorVerified: true });
     const specialtiesCount = specializations.length;
 
     res.json({
@@ -24,7 +25,7 @@ const getPublicStats = async (req, res, next) => {
 
 const getDoctors = async (req, res, next) => {
   try {
-    const filters = { role: 'doctor' };
+    const filters = { role: 'doctor', doctorVerified: true };
     
     // Optional filtering by specialization
     if (req.query.specialization) {
@@ -43,13 +44,15 @@ const getDoctors = async (req, res, next) => {
 
 const getPatients = async (req, res, next) => {
   try {
-    const filters = { role: 'patient' };
+    const patientIds = await Appointment.distinct('patient', { doctor: req.user._id });
+    const filters = { role: 'patient', _id: { $in: patientIds } };
     
     if (req.query.name) {
-      filters.name = { $regex: req.query.name, $options: 'i' };
+      const escapedName = req.query.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      filters.name = { $regex: escapedName, $options: 'i' };
     }
 
-    const patients = await User.find(filters).select('-password');
+    const patients = await User.find(filters).select('name username phone address');
     res.json({
       success: true,
       data: patients
@@ -61,7 +64,11 @@ const getPatients = async (req, res, next) => {
 
 const getDoctorById = async (req, res, next) => {
   try {
-    const doctor = await User.findOne({ _id: req.params.id, role: 'doctor' }).select('-password');
+    const doctor = await User.findOne({
+      _id: req.params.id,
+      role: 'doctor',
+      doctorVerified: true
+    }).select('-password');
     
     if (!doctor) {
       return res.status(404).json({ success: false, message: 'Doctor not found' });

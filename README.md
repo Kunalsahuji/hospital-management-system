@@ -20,6 +20,8 @@
 ## ✨ Features
 - **High-Fidelity UI**: Clean, premium aesthetic with smooth gradients, glassmorphism hover effects, and micro-animations for enhanced engagement.
 - **Role-Based Authentication**: Secure login and registration flows tailored for Doctors and Patients using JWT authentication.
+- **Doctor Verification**: Doctor registrations remain pending until an administrator verifies the account. Only verified doctors can sign in or access doctor-only data.
+- **Patient Privacy**: Doctors can view only patients connected to their appointments, with only the fields needed for the patient directory.
 - **Dynamic Dashboards**: 
   - **Patients**: View history, check appointment statuses, and seamlessly book new consultations.
   - **Doctors**: Manage daily schedules, update appointment statuses (Scheduled, Confirmed, Completed, Cancelled), and view patient details.
@@ -61,8 +63,10 @@ npm run dev
 ---
 
 ## 🔗 Live Implementation
-🚀 **Deployment**: *(Add your deployment link here)*
-📂 **Github Repository**: *(Add your github repo link here)*
+- **Frontend (Vercel)**: [https://hospital-management-system-brown-three.vercel.app](https://hospital-management-system-brown-three.vercel.app)
+- **Backend API (Render)**: [https://hospital-management-system-oklk.onrender.com](https://hospital-management-system-oklk.onrender.com)
+- **Health Check**: [https://hospital-management-system-oklk.onrender.com/api/health](https://hospital-management-system-oklk.onrender.com/api/health)
+- **GitHub Repository**: [Kunalsahuji/hospital-management-system](https://github.com/Kunalsahuji/hospital-management-system)
 
 ---
 

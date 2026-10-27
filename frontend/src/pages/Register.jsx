@@ -144,9 +144,11 @@ const Register = () => {
       };
     }
 
-    const success = await register(payload);
+    const registrationResult = await register(payload);
     
-    if (success) {
+    if (registrationResult === 'pending') {
+      navigate('/doctor/login');
+    } else if (registrationResult) {
       if (role === 'patient') navigate('/patient/dashboard');
       if (role === 'doctor') navigate('/doctor/dashboard');
     }

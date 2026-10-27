@@ -15,6 +15,8 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+    lowercase: true,
+    trim: true,
   },
   password: {
     type: String,
@@ -23,11 +25,17 @@ const userSchema = new mongoose.Schema({
   phone: {
     type: String,
     required: true,
+    unique: true,
+    trim: true,
   },
   role: {
     type: String,
     enum: ['patient', 'doctor'],
     required: true,
+  },
+  doctorVerified: {
+    type: Boolean,
+    default: false,
   },
   // Doctor specific fields
   specialization: {
