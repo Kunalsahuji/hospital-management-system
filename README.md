@@ -6,7 +6,7 @@
 
 ## 📌 Project Details
 - **Objective**: Build a world-class, responsive hospital management system that simplifies the appointment booking process for both patients and doctors.
-- **Key Modules**: Dedicated Role-Based Dashboards (Patient & Doctor), Instant Appointment Scheduling, Advanced Filtering & Pagination, and Profile Management.
+- **Key Modules**: Role-Based Dashboards (Patient, Doctor & Admin), Doctor Verification and Approval, Appointment Scheduling, Advanced Filtering & Pagination, and Profile Management.
 - **Design Philosophy**: Strict adherence to a clean, modern, and accessible design system, ensuring pixel-perfect layout and interaction patterns across all desktop and mobile viewports.
 - **Tech Stack**:
   - **Frontend**: React + Vite
@@ -74,6 +74,10 @@ Admins sign in at `/admin/login`. The `/admin/dashboard` page lists pending
 doctor applications and supports approval or rejection. Doctors can sign in and
 use doctor features only after approval. Verify a clinician's credentials
 before approving; rejected applications cannot sign in.
+
+The production admin account is provisioned separately. Never add its username,
+password, or contact details to this public README, source control, or frontend
+configuration; keep login credentials in a private password manager.
 
 ### 🔹 Frontend
 ```bash
